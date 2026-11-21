@@ -34,6 +34,7 @@ CAMT, Chiang Mai University · Year 3
 | **Arcana** · coding exam platform | Built it as a paid student developer at CAMT. The college ran a full semester of exams on it. 446 of 447 commits are mine. |
 | **[Memory Clip](https://github.com/Ling4826/memory-clip)** · ESP32 camera + Flask | ESP32 camera → Flask server → web app. 5 days of real use: 2,861 photos, 60 clips. |
 | **[RIDEE](https://chiangmai-main.vercel.app)** · eco-ride score | 3rd place, K-CAMT 2026 Climate Tech Hackathon. Led a Thai-Korean team. |
+| **[AI Not Pass](https://github.com/Ling4826/ai-not-pass-backend)** · Spring Boot + Vue | Team of 3. Members pass level exams to unlock AI services. JWT login with refresh and revocation, role-based access. |
 | **[Artistverse X](https://github.com/Ling4826/Artistverse_X)** | Vue 3 + Flask app that recommends songs and writes lyrics with AI. |
 | **[Games on itch.io](https://lingth.itch.io)** | Small games I made. |
 
