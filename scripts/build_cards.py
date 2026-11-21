@@ -148,7 +148,7 @@ def lesson_log(days, total):
 def fetch_calendar():
     q = json.dumps({"query": '{user(login:"%s"){contributionsCollection{contributionCalendar{totalContributions weeks{contributionDays{contributionCount}}}}}}' % USER})
     req = urllib.request.Request("https://api.github.com/graphql", data=q.encode(),
-                                 headers={"Authorization": "bearer " + os.environ["GITHUB_TOKEN"], "Content-Type": "application/json"})
+                                 headers={"Authorization": "bearer " + (os.environ.get("LOG_TOKEN") or os.environ["GITHUB_TOKEN"]), "Content-Type": "application/json"})
     cal = json.load(urllib.request.urlopen(req))["data"]["user"]["contributionsCollection"]["contributionCalendar"]
     weeks = [[d["contributionCount"] for d in wk["contributionDays"]] for wk in cal["weeks"]]
     weeks[0] = [None] * (7 - len(weeks[0])) + weeks[0]  # first week starts mid-week
