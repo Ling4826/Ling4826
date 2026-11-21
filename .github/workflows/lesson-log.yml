@@ -1,4 +1,4 @@
-name: snake
+name: lesson-log
 
 on:
   schedule:
@@ -11,16 +11,16 @@ permissions:
   contents: write
 
 jobs:
-  generate:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: Platane/snk@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          github_user_name: ${{ github.repository_owner }}
-          outputs: |
-            dist/snake.svg?color_snake=#4a9fd8&color_dots=#eef6fb,#cfe8f7,#9fd2ee,#6fb8e2,#3f9bd4
-            dist/snake-dark.svg?palette=github-dark&color_snake=#7cc7e8&color_dots=#161b22,#0e3a5a,#1d5f8a,#3f8fc4,#7cc7e8
-
+          python-version: "3.12"
+      - run: python scripts/build_cards.py log dist/lesson-log.svg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: crazy-max/ghaction-github-pages@v4
         with:
           target_branch: output
