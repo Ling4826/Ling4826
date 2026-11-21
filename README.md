@@ -15,7 +15,3 @@
 <a href="https://github.com/Ling4826/Artistverse_X"><img src="assets/cards/live-artistverse.svg" width="100%" alt="Artistverse X: Vue 3 + Flask music app"></a>
 
 More small games on **[lingth.itch.io](https://lingth.itch.io)**.
-
-### <img src="assets/items/rank.png" height="30" align="absmiddle" alt=""> Lesson Log
-
-<img src="https://raw.githubusercontent.com/Ling4826/Ling4826/output/lesson-log.svg" width="100%" alt="Contribution calendar: Lilja runs through every lesson day">

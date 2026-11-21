@@ -1,13 +1,11 @@
 """Build the game-style SVG cards for the profile README.
 
   python scripts/build_cards.py cards          -> assets/cards/*.svg (static, commit them)
-  python scripts/build_cards.py log <out.svg>  -> lesson log from the contribution calendar
-                                                  (needs GITHUB_TOKEN; run by the workflow)
 
 Every card has a viewBox and its own light background, so it scales to any
 screen width and looks the same in GitHub's light and dark themes.
 """
-import base64, json, os, sys, urllib.request
+import base64, os, sys
 from html import escape
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -109,50 +107,6 @@ def live(key, title, sub, col, badge, lines):
     return svg(w, h, body, f"{title}: {sub}")
 
 
-def lesson_log(days, total):
-    """days: list of weeks, each a list of contribution counts (Sun..Sat)."""
-    cols = len(days)
-    cell, gap, x0, y0 = 11, 3, 30, 92
-    w = x0 * 2 + cols * (cell + gap) - gap
-    h = y0 + 7 * (cell + gap) + 46
-    dur = 10
-    pal = ["#edf3f8", "#cfe9f8", "#8fcdee", "#4aa8e0", "#2b6fb3"]
-    nz = sorted(c for wk in days for c in wk if c) or [1]
-    q = [nz[int(len(nz) * f)] for f in (.25, .5, .75)]
-    grid = []
-    for ci, wk in enumerate(days):
-        t = ci / cols * dur
-        for ri, c in enumerate(wk):
-            if c is None:
-                continue
-            lvl = 0 if c == 0 else 1 + sum(c > t for t in q)
-            x, y = x0 + ci * (cell + gap), y0 + ri * (cell + gap)
-            grid.append(f'<rect x="{x}" y="{y}" width="{cell}" height="{cell}" rx="3" fill="{pal[lvl]}"/>')
-            if lvl:
-                grid.append(f'<rect x="{x}" y="{y}" width="{cell}" height="{cell}" rx="3" fill="{VO if lvl == 4 else "#ffffff"}" opacity="0">'
-                            f'<animate attributeName="opacity" values="0;.85;0" keyTimes="0;.03;.12" dur="{dur}s" begin="{t:.2f}s" repeatCount="indefinite"/></rect>')
-    sprite = img64("assets/items/parameters.png")
-    run = (f'<g><image href="{sprite}" x="-20" y="{y0-46}" width="40" height="40"/>'
-           f'<animateTransform attributeName="transform" type="translate" values="{x0-10},0;{w-x0+10},0" dur="{dur}s" repeatCount="indefinite"/>'
-           f'<animateTransform attributeName="transform" type="translate" additive="sum" values="0,0;0,-7;0,0" dur=".5s" repeatCount="indefinite"/></g>')
-    legend = "".join(f'<rect x="{w-x0-40-5*(cell+gap)+i*(cell+gap)}" y="{h-30}" width="{cell}" height="{cell}" rx="3" fill="{c}"/>' for i, c in enumerate(pal))
-    body = (panel(w, h, "LESSON LOG") +
-            f'<text x="{w-24}" y="29" font-size="14" font-weight="700" fill="{SUB}" text-anchor="end">{total:,} lessons in the last year</text>'
-            + "".join(grid) + run +
-            f'<text x="{x0}" y="{h-20}" font-size="15" fill="{SUB}">Lilja runs through every lesson day</text>'
-            f'<text x="{w-x0-40-5*(cell+gap)-8}" y="{h-20}" font-size="12" fill="{SUB}" text-anchor="end">less</text>{legend}'
-            f'<text x="{w-x0-34}" y="{h-20}" font-size="12" fill="{SUB}">more</text>')
-    return svg(w, h, body, f"Lesson log: {total} contributions")
-
-
-def fetch_calendar():
-    q = json.dumps({"query": '{user(login:"%s"){contributionsCollection{contributionCalendar{totalContributions weeks{contributionDays{contributionCount}}}}}}' % USER})
-    req = urllib.request.Request("https://api.github.com/graphql", data=q.encode(),
-                                 headers={"Authorization": "bearer " + (os.environ.get("LOG_TOKEN") or os.environ["GITHUB_TOKEN"]), "Content-Type": "application/json"})
-    cal = json.load(urllib.request.urlopen(req))["data"]["user"]["contributionsCollection"]["contributionCalendar"]
-    weeks = [[d["contributionCount"] for d in wk["contributionDays"]] for wk in cal["weeks"]]
-    weeks[0] = [None] * (7 - len(weeks[0])) + weeks[0]  # first week starts mid-week
-    return weeks, cal["totalContributions"]
 
 
 if __name__ == "__main__":
@@ -165,10 +119,3 @@ if __name__ == "__main__":
             with open(os.path.join(out, name), "w", encoding="utf-8") as f:
                 f.write(text)
         print("wrote", ", ".join(files))
-    elif sys.argv[1] == "log":
-        weeks, total = fetch_calendar()
-        assert weeks and all(len(w) <= 7 for w in weeks), "unexpected calendar shape"
-        os.makedirs(os.path.dirname(os.path.abspath(sys.argv[2])), exist_ok=True)
-        with open(sys.argv[2], "w", encoding="utf-8") as f:
-            f.write(lesson_log(weeks, total))
-        print("lesson log:", total, "contributions,", len(weeks), "weeks")
