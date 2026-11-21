@@ -45,11 +45,9 @@ CAMT, Chiang Mai University · Year 3
 
 <br>
 
-<!-- snake: enable after workflow runs
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Ling4826/Ling4826/output/snake-dark.svg">
   <img src="https://raw.githubusercontent.com/Ling4826/Ling4826/output/snake.svg" width="100%" alt="contribution snake">
 </picture>
--->
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:7cc7e8,50:bfe4f7,100:eaf7ff&height=110&section=footer" width="100%" alt="">
