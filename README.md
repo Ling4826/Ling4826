@@ -40,8 +40,7 @@ CAMT, Chiang Mai University · Year 3
 ### Produce Rank
 
 <div align="center">
-<img src="https://github-readme-stats.vercel.app/api?username=Ling4826&show_icons=true&count_private=true&hide_border=true&bg_color=f4fbff&title_color=4a9fd8&icon_color=7cc7e8&text_color=334" height="165" alt="GitHub stats">
-<img src="https://streak-stats.demolab.com?user=Ling4826&hide_border=true&background=f4fbff&ring=7cc7e8&fire=4a9fd8&currStreakLabel=4a9fd8&sideLabels=4a9fd8&currStreakNum=334&sideNums=334&dates=7a8a99" height="165" alt="GitHub streak">
+<img src="https://github-readme-stats.vercel.app/api?username=Ling4826&show_icons=true&count_private=true&hide_rank=true&hide_border=true&bg_color=f4fbff&title_color=4a9fd8&icon_color=7cc7e8&text_color=334" height="165" alt="GitHub stats">
 </div>
 
 <br>
